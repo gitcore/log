@@ -37,7 +37,7 @@
 <link href="/index/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="杂谈," />
+  <meta name="keywords" content=".net,C#,owin," />
 
 
 
@@ -53,19 +53,16 @@
 
 
 
-<meta name="description" content="周五，一如往常，准时下班匆匆的赶往南站，拖着一周的疲惫，踏着昏沉的灯光，习惯性的坐上了回家的大巴
-今天北京下起了大雪，而南京这里却像跟你开玩笑似的热浪扑面，慵懒的坐在车上，百无聊赖的看着高速上拥堵的车辆，五光十色且熙熙攘攘，心里不禁问起自己，这条已经走了许多年的回家路是什么时候变得竟如此拥挤了">
+<meta name="description" content="最近在做一个推送服务器项目，使用的是owin，因为发现网上关于owin的几乎都是纯技术性的文章，觉得有点不好理解，所以我就写了这篇文章，谈谈我个人对owin的认知，即作为项目的总结，也希望给想学习owin的同学抛块砖，当然就像我写的那样这是我自己的理解，并不代表官方意见^_^">
 <meta property="og:type" content="article">
-<meta property="og:title" content="心底的起程">
-<meta property="og:url" content="http://gitcore.github.io/index/2015/11/06/firststep/index.html">
+<meta property="og:title" content="owin笔记（一）">
+<meta property="og:url" content="http://gitcore.github.io/index/2015/11/08/owin-experience-0/index.html">
 <meta property="og:site_name" content="gitcore's blog">
-<meta property="og:description" content="周五，一如往常，准时下班匆匆的赶往南站，拖着一周的疲惫，踏着昏沉的灯光，习惯性的坐上了回家的大巴
-今天北京下起了大雪，而南京这里却像跟你开玩笑似的热浪扑面，慵懒的坐在车上，百无聊赖的看着高速上拥堵的车辆，五光十色且熙熙攘攘，心里不禁问起自己，这条已经走了许多年的回家路是什么时候变得竟如此拥挤了">
-<meta property="og:updated_time" content="2015-11-08T13:20:29.788Z">
+<meta property="og:description" content="最近在做一个推送服务器项目，使用的是owin，因为发现网上关于owin的几乎都是纯技术性的文章，觉得有点不好理解，所以我就写了这篇文章，谈谈我个人对owin的认知，即作为项目的总结，也希望给想学习owin的同学抛块砖，当然就像我写的那样这是我自己的理解，并不代表官方意见^_^">
+<meta property="og:updated_time" content="2015-11-11T15:48:11.247Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="心底的起程">
-<meta name="twitter:description" content="周五，一如往常，准时下班匆匆的赶往南站，拖着一周的疲惫，踏着昏沉的灯光，习惯性的坐上了回家的大巴
-今天北京下起了大雪，而南京这里却像跟你开玩笑似的热浪扑面，慵懒的坐在车上，百无聊赖的看着高速上拥堵的车辆，五光十色且熙熙攘攘，心里不禁问起自己，这条已经走了许多年的回家路是什么时候变得竟如此拥挤了">
+<meta name="twitter:title" content="owin笔记（一）">
+<meta name="twitter:description" content="最近在做一个推送服务器项目，使用的是owin，因为发现网上关于owin的几乎都是纯技术性的文章，觉得有点不好理解，所以我就写了这篇文章，谈谈我个人对owin的认知，即作为项目的总结，也希望给想学习owin的同学抛块砖，当然就像我写的那样这是我自己的理解，并不代表官方意见^_^">
 
 
 
@@ -77,7 +74,7 @@
   };
 </script>
 
-  <title> 心底的起程 | gitcore's blog </title>
+  <title> owin笔记（一） | gitcore's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
@@ -217,7 +214,7 @@
             
             
               
-                心底的起程
+                owin笔记（一）
               
             
           </h1>
@@ -226,8 +223,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2015-11-06T21:35:46+08:00" content="2015-11-06">
-              2015-11-06
+            <time itemprop="dateCreated" datetime="2015-11-08T22:08:43+08:00" content="2015-11-08">
+              2015-11-08
             </time>
           </span>
 
@@ -250,11 +247,16 @@
       
 
       
-        <span itemprop="articleBody"><p>周五，一如往常，准时下班匆匆的赶往南站，拖着一周的疲惫，踏着昏沉的灯光，习惯性的坐上了回家的大巴</p>
-<p>今天北京下起了大雪，而南京这里却像跟你开玩笑似的热浪扑面，慵懒的坐在车上，百无聊赖的看着高速上拥堵的车辆，五光十色且熙熙攘攘，心里不禁问起自己，这条已经走了许多年的回家路是什么时候变得竟如此拥挤了<br><a id="more"></a><br>回想从毕业到现在，大抵的感觉不过一瞬之间，似乎心里的一切仍旧停滞在模模糊糊却又最美好的时光之中，可仔细看看周围，回忆就像电影那样一幕幕的浮现在眼前，真实却又那么的虚幻，如梦幻泡影般却又触手可及。作为一个不太成功的八零后，总仿佛觉得印象里的生活不该这样浑浑噩噩，却又贪婪的享受这种浑浑噩噩中的惬意，这种感觉就像吸毒一般，总是痛和快乐这两种状态交替刺激，不过至少这一次改变的冲动占了上风</p>
-<p>恍惚之间，大巴到了终点，我迷迷糊糊条件反射性的下了车，没料到车外竟然开始下起了雨，寒风吹过，如梦初醒，心底却还保留着阵阵涟漪，急速回到家中，我就开始搭建这个博客，总感觉脑海中有个声音不停的告诉我应该这样做</p>
-<p>现在外面暴雨如梭，滴滴答答，但是雨中的世界却又给我一种莫名的安宁，正是这种安宁让我产生一种莫名的希望，这也成为了我整这个技术博客的主要原因了，也打算从这里开始，慢慢能够靠近成功</p>
-<p>我是一名生活瘾君子，也知道有句老话叫做江山易改本性难移，我不知道我是否能坚持，不过管他呢，至少我现在不是写完了这篇启程了吗</p>
+        <span itemprop="articleBody"><p>最近在做一个推送服务器项目，使用的是owin，因为发现网上关于owin的几乎都是纯技术性的文章，觉得有点不好理解，所以我就写了这篇文章，谈谈我个人对owin的认知，即作为项目的总结，也希望给想学习owin的同学抛块砖，当然就像我写的那样这是我自己的理解，并不代表官方意见^_^<br><a id="more"></a></p>
+<p>###什么是owin<br>这三篇博客已经把owin具体结构描述的非常清晰了</p>
+<p><a href="http://www.cnblogs.com/OceanEyes/p/thinking-in-asp-net-mvc-what-is-owin.html" target="_blank" rel="external">ASP.NET MVC随想录——漫谈OWIN</a></p>
+<p><a href="http://www.cnblogs.com/dudu/p/what-is-owin.html" target="_blank" rel="external">OWIN是什么？</a></p>
+<p><a href="http://www.cnblogs.com/JustRun1983/p/3955238.html" target="_blank" rel="external">下一代Asp.net开发规范OWIN（1）—— OWIN产生的背景以及简单介绍</a></p>
+<p>###到底什么是owin<br>我觉得与其说这是一门.net平台的新的web开发技术，不如说是一个开放的微软的直接体现。本质上来说owin没有什么新技术在里面，如果简单的总结，owin的大体设计和IIS+IHttpHandler概念上基本是一致的，而应用层面还是asp.net mvc或nancy等等，你完全不需要学习任何新东西就可以上手。说到这那么你会奇怪了，那还要owin干什么？</p>
+<p>如果你一直在使用微软的.net平台，那么你肯定会有一种感受，除了业务层面的东西，底层基本都是黑匣子，正因为这黑匣子不但将你牢牢地绑在了windows平台，而且还严重限制了你扩展应用优化性能，造成了各种不能忍。比如对于原来的asp.net来说优化只能到最轻量的IHttpHandler为止，而之前的HttpWorker管线对你来说就是一抹黑，再怎么优化也无法摆脱IIS性能对应用的束缚，这种要命的局限性也直接注定了.net平台的尴尬现状，虽然极为优秀却乏人问津</p>
+<p>现在owin来了，它定义一个完整的规范，从下至上从里到外，彻底解放了原有的种种束缚，只要你愿意折腾，所有的地方都可以折腾，全部都靠一个简单不能再简单的委托模型链接。所以就像我最开始写的与其说owin是门新技术，不如说它是种景愿，希望能扫去过去的尘埃激发平台的活力</p>
+<p>###总结<br>如果asp.net代表了一个平台的话，那么owin就是更好的asp.net，更简单更灵活，并且性能更高，owin完全解耦了.net web应用程序与web服务器，它们之间通过透明的接口进行调用，所有的调用管线全部都清清楚楚明明白白，可以完全掌控，再也不是以前那种一抹黑了</p>
+<p>现在你可以尽情的扩展优化你的服务了，无论是在web服务器层面还是在应用层面，你不会再有任何限制</p>
 </span>
       
     </div>
@@ -263,7 +265,11 @@
       
         <div class="post-tags">
           
-            <a href="/index/tags/杂谈/" rel="tag">#杂谈</a>
+            <a href="/index/tags/net/" rel="tag">#.net</a>
+          
+            <a href="/index/tags/C/" rel="tag">#C#</a>
+          
+            <a href="/index/tags/owin/" rel="tag">#owin</a>
           
         </div>
       
@@ -272,13 +278,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/index/2015/11/06/firststep/" rel="next" title="心底的起程">
+                <i class="fa fa-chevron-left"></i> 心底的起程
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/index/2015/11/08/owin-experience-0/" rel="prev" title="owin笔记（一）">
-                owin笔记（一） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
