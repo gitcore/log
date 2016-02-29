@@ -59,7 +59,7 @@
 <meta property="og:url" content="http://gitcore.github.io/index/2015/11/14/mvvm-1/index.html">
 <meta property="og:site_name" content="gitcore's blog">
 <meta property="og:description" content="阅读以下内容你需要理解依赖对象、依赖属性、XAML的基本原理和XAML的附加属性。">
-<meta property="og:updated_time" content="2016-02-29T22:40:10.815Z">
+<meta property="og:updated_time" content="2016-02-29T22:52:31.597Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Blend SDK MVVM实现原理分析前篇">
 <meta name="twitter:description" content="阅读以下内容你需要理解依赖对象、依赖属性、XAML的基本原理和XAML的附加属性。">
@@ -265,7 +265,7 @@
     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BehaviorCollection <span class="title">GetBehaviors</span>(<span class="params">DependencyObject obj</span>)</span>;
     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> TriggerCollection <span class="title">GetTriggers</span>(<span class="params">DependencyObject obj</span>)</span>;
 }
-</code></pre><p>代码中可以看出通过声明<i:interaction.triggers>元素,XAML运行时得到了一个TriggerCollection集合,即触发器集合。接下来在<i:eventtrigger eventname="Click">元素中，XAML运行时创建了一个EventTrigger类实例，并将EventName属性设置为了Click，再接着在<ec:callmethodaction>元素中，XAML运行时创建了一个CallMethodAction类实例，并设置相关属性来处理Click事件，看似简单的流程实际上引起了一系列的化学反应。</ec:callmethodaction></i:eventtrigger></i:interaction.triggers></p>
+</code></pre><p>代码中可以看出通过声明<br><code>&lt;i:Interaction.Triggers&gt;</code>元素,XAML运行时得到了一个TriggerCollection集合,即触发器集合。接下来在<code>&lt;i:EventTrigger EventName=&quot;Click&quot;&gt;</code>元素中，XAML运行时创建了一个EventTrigger类实例，并将EventName属性设置为了Click，再接着在<code>&lt;ec:CallMethodAction&gt;</code>元素中，XAML运行时创建了一个CallMethodAction类实例，并设置相关属性来处理Click事件，看似简单的流程实际上引起了一系列的化学反应。</p>
 <p>先看TriggerCollection类，他的功能很简单从代码上看<br>    internal override void ItemAdded(TriggerBase item)<br>    {<br>        if (base.AssociatedObject != null)<br>        {<br>            item.Attach(base.AssociatedObject);<br>        }<br>    }<br>仅仅是如果有Trigger加入集合便调用此Trigger的Attach方法，上述代码使用了TriggerBase基类，实际上我们声明的EventTrigger正是TriggerBase的子类，Attach传递了一个很重要的参数即AssociatedObject，这个对象正是对应了EventTrigger中的Source源属性，也就是说TriggerCollection干了一件事就是为这个EventTrigger准备好了运行环境。</p>
 <p>接下来重要的就是EventName的设置了，代码太长我就不列举了，最最重要的就是当EventName设置的时候会有通知事件告知EventTrigger类，当通知发生EventTrigger便会调用自身的一个重要方法void OnEventNameChanged，进入此方法你就会发现秘密豁然开朗</p>
 <pre><code><span class="function"><span class="keyword">internal</span> <span class="keyword">void</span> <span class="title">OnEventNameChanged</span>(<span class="params"><span class="keyword">string</span> oldEventName, <span class="keyword">string</span> newEventName</span>)
