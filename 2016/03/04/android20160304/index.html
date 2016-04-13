@@ -1,0 +1,710 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/index/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  
+
+
+
+<link href="/index/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/index/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android,java,retrofit," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="Retrofit是Square开源的一个类型安全的HTTP访问框架，结构清晰，是一个值得仔细品味学习的java代码设计模板，末尾提供了一个扩展访问Sqlite的思路，以体现Retrofit设计的巧妙。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Retrofit详解和扩展">
+<meta property="og:url" content="http://gitcore.github.io/index/2016/03/04/android20160304/index.html">
+<meta property="og:site_name" content="gitcore's blog">
+<meta property="og:description" content="Retrofit是Square开源的一个类型安全的HTTP访问框架，结构清晰，是一个值得仔细品味学习的java代码设计模板，末尾提供了一个扩展访问Sqlite的思路，以体现Retrofit设计的巧妙。">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/625299-fabf4d74f4785c5e.png?imageMogr2/auto-orient/strip%7CimageView2/2">
+<meta property="og:updated_time" content="2016-04-13T02:46:04.062Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Retrofit详解和扩展">
+<meta name="twitter:description" content="Retrofit是Square开源的一个类型安全的HTTP访问框架，结构清晰，是一个值得仔细品味学习的java代码设计模板，末尾提供了一个扩展访问Sqlite的思路，以体现Retrofit设计的巧妙。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'always',
+    motion: true
+  };
+</script>
+
+  <title> Retrofit详解和扩展 | gitcore's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/index/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">gitcore's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">学而时习之，不亦说乎</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/index" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/index/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/index/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/index/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/index/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Retrofit详解和扩展
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-03-04T21:10:45+08:00" content="2016-03-04">
+              2016-03-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>Retrofit是Square开源的一个类型安全的HTTP访问框架，结构清晰，是一个值得仔细品味学习的java代码设计模板，末尾提供了一个扩展访问Sqlite的思路，以体现Retrofit设计的巧妙。<br><a id="more"></a></p>
+<p>###Retrofit优点<br>先看看在没有Retrofit日子里我们是如何做请求的</p>
+<ul>
+<li>1.首先build request参数</li>
+<li>2.因为不能在主线程请求HTTP，所以你得有个Executer或者线程</li>
+<li>3.enqueue后，通过线程去run你的请求</li>
+<li>4.得到服务器数据后，callback回调给你的上层。</li>
+</ul>
+<p>基本都是以上四步，其中的实现也是五花八门，曾经有段时间公司做技术分享内容几乎都是HttpClient+异步and眉飞色舞的封装……</p>
+<p>再来对比Retrofit，以github api为例:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GitHubService</span> </span>&#123;</span><br><span class="line">  <span class="annotation">@GET</span>(<span class="string">"users/&#123;user&#125;/repos"</span>)</span><br><span class="line">  Call&lt;List&lt;Repo&gt;&gt; listRepos(<span class="annotation">@Path</span>(<span class="string">"user"</span>) String user);</span><br><span class="line">  </span><br><span class="line">  <span class="annotation">@GET</span>(<span class="string">"/repos/&#123;owner&#125;/&#123;repo&#125;/contributors"</span>)</span><br><span class="line">  Call&lt;List&lt;Contributor&gt;&gt; contributors(<span class="annotation">@Path</span>(<span class="string">"owner"</span>) String owner, <span class="annotation">@Path</span>(<span class="string">"repo"</span>) String repo);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">    .baseUrl(<span class="string">"https://api.github.com/"</span>)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line">GitHubService service = retrofit.create(GitHubService.class);</span><br><span class="line"></span><br><span class="line"><span class="comment">//访问repo</span></span><br><span class="line">Call&lt;List&lt;Repo&gt;&gt; repos = service.listRepos(<span class="string">"octocat"</span>);</span><br><span class="line"><span class="comment">//访问contributors</span></span><br><span class="line">Call&lt;List&lt;Contributor&gt;&gt; contributors = service.contributors(<span class="string">"square"</span>, <span class="string">"retrofit"</span>);</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>1.创建抽象服务接口Service Interface</li>
+<li>2.使用annotations描述你的HTTP请求</li>
+<li>3.然后通过Retrofit创建Service Interface的代理对象</li>
+<li>4.调用方法得到结果，callback回调给你的上层</li>
+</ul>
+<p>虽然也是四步，但一切却完全不同了。首先一切build request代码都没有了，要知道这可是一大坨一大坨的，annotations省事省时省心；其次你直接就有了数据接口，无需为了抽象或单元测试再去创建数据接口然后封装build request代码，又是一坨一坨；最后异步也不会黏着在一起了，轻轻松松得到易于测试易于维护结构优雅的代码。</p>
+<p>###Retrofit核心原理<br>我们来看看Retrofit是如何做到这一切的，以2.0.1版本的代码为参考，将前面的Retrofit.create方法展开，这里是Retrofit核心流程的一段代码了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">create</span><span class="params">(<span class="keyword">final</span> Class&lt;T&gt; service)</span> </span>&#123;</span><br><span class="line">    Utils.validateServiceInterface(service);</span><br><span class="line">    <span class="keyword">if</span> (validateEagerly) &#123;</span><br><span class="line">      eagerlyValidateMethods(service);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (T) Proxy.newProxyInstance(service.getClassLoader(), <span class="keyword">new</span> Class&lt;?&gt;[] &#123; service &#125;,</span><br><span class="line">        <span class="keyword">new</span> InvocationHandler() &#123;</span><br><span class="line">          <span class="keyword">private</span> <span class="keyword">final</span> Platform platform = Platform.get();</span><br><span class="line"></span><br><span class="line">          <span class="annotation">@Override</span> <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object... args)</span></span><br><span class="line">              <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">            <span class="comment">// If the method is a method from Object then defer to normal invocation.</span></span><br><span class="line">            <span class="keyword">if</span> (method.getDeclaringClass() == Object.class) &#123;</span><br><span class="line">              <span class="keyword">return</span> method.invoke(<span class="keyword">this</span>, args);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (platform.isDefaultMethod(method)) &#123;</span><br><span class="line">              <span class="keyword">return</span> platform.invokeDefaultMethod(method, service, proxy, args);</span><br><span class="line">            &#125;</span><br><span class="line">            ServiceMethod serviceMethod = loadServiceMethod(method);</span><br><span class="line">            OkHttpCall okHttpCall = <span class="keyword">new</span> OkHttpCall&lt;&gt;(serviceMethod, args);</span><br><span class="line">            <span class="keyword">return</span> serviceMethod.callAdapter.adapt(okHttpCall);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>你会发现最重要的莫过于<code>Proxy.newProxyInstance(loader, interface, handler)</code>这句，因为它返回了GitHubService的实例，百度下java proxy你能看到整个retrofit的核心概念java动态代理。</p>
+<p><strong>所谓的Java动态代理，是jdk1.5上增加的一种代码拦截机制，它会为接口生成的动态代理类，并将所有功能交给InvocationHandler处理。</strong></p>
+<p>然后再看看InvocationHandler的实现，你就应该明白这里面都干了些什么，上面提到过在没有Retrofit的日子你需要做文章开始前的4步，而Retrofit通过Java的动态代理机制和注解帮你在4步之前增加了一个解析模块将annotations直接映射为request，巧妙地帮你简化和重构了代码。</p>
+<p>###Retrofit最佳实践<br>接下来我们来看Retrofit设计上的一些最佳实践，首先看下网上挖的Stay神画的模块解析图</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/625299-fabf4d74f4785c5e.png?imageMogr2/auto-orient/strip%7CimageView2/2" alt="Alt text" title="模块解析图"></p>
+<p>是不是很惊讶，天天看书却又烦恼无处使用的设计模式比比皆是，外观模式、动态代理、策略模式、观察者模式、建造者模式、工厂模式等等，正式这些设计模式的妥善应用，你会发现Retrofit扩展点非常的多，一个完整的callback流程几乎处处可以扩展，所以可以这么说Retrofit本身就是一本Java代码最佳实践。</p>
+<p>最后我们来看看Retrofit的几个主要扩展接口和一个完整的callback流程</p>
+<ul>
+<li><p><strong><code>Converter&lt;F, T&gt;</code></strong><br>转换器接口，负责将F转换为T。Retrofit默认提供了gson jackson moshi protobuf scalars xml wire这几种转换器，用来将HTTP返回的数据解析成Java对象。</p>
+</li>
+<li><p><strong><code>Call&lt;T&gt;</code></strong><br>调用接口，负责执行请求返回结果T。这个Call不一定是Http请求，只是Retrofit默认的实现是<code>OkHttpCall&lt;T&gt;</code>，而且所有请求都会创建一个OkHttpCall</p>
+</li>
+<li><p><strong><code>CallAdapter&lt;T&gt;</code></strong><br>适配器接口，负责<code>Call&lt;R&gt;</code>的执行结果R转换为T。CallAdapter中只有<code>responseType()</code>和<code>&lt;R&gt; T adapt(Call&lt;R&gt; call)</code>两个方法，很关键的接口，有了它想怎么玩怎么玩，默认实现为DefaultCallAdapterFactory.CallAdapter</p>
+</li>
+</ul>
+<p><strong>一个完整的callback流程</strong></p>
+<p>1、通过Retrofit来创建一个Service Interface的动态代理</p>
+<p>2、当你调用这个Service Interface中的某个请求方法，调用会被拦截，转交由InvocationHandler处理。</p>
+<p>3、通过ServiceMethod来解析invoke的那个方法，通过解析注解将它们封装成request，再根据request生成Call，不清楚2.0.1为什么要写死OkHttpCall。然后让之前配置的工厂生成具体的CallAdapter，调用adap方法将Call传入</p>
+<p>4、CallAdapter会负责具体的Call执行，包括线程管理和Call结果处理。</p>
+<p>5、Converter负责处理raw response转换成我们具体想要的T。</p>
+<p>6、返回T回调上层</p>
+<p>###Retrofit扩展访问Sqlite<br>Retrofit 2.x和Retrofit 1.x有着很大的不同，下面的例子采用更的是1.9版本，主要是感受下扩展能力，2.x版本感觉还在更改中，有些地方有些诡异。。。。例如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OkHttpCall okHttpCall = <span class="keyword">new</span> OkHttpCall&lt;&gt;(serviceMethod, args);`</span><br></pre></td></tr></table></figure></p>
+<p>这段代码，直接把Call类型确定了，并且和okhttp紧密绑定，和之前的那种解耦的插件设计有些出入，虽然适配器可以重新包装OkHttpCall，但是总给人怪怪的感觉。</p>
+<p>如何实现调用Sqlite，其实很简单，Retrofit的OkHttpCall是负责执行HTTP请求的，只要将相关执行者换成数据库调用执行即可，1.9版本提供了下面几个关键接口用来实现调用</p>
+<ul>
+<li><p><strong>Client</strong><br>负责请求执行，有点类似于<code>Call&lt;T&gt;</code>，默认实现是OkHttpClient，这里我们需要实现一个SqliteClient来负责执行数据库查询</p>
+</li>
+<li><p><strong>Converter</strong><br>转换器，负责TypedInput和TypedOutput的转换，非常重要，所有的调用结果都需要走Converter实现转换，这里实现一个SqliteConverter来提供orm对象实例</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义输入输出类型增加透明传输对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TypedSqlite</span> <span class="keyword">implements</span> <span class="title">TypedInput</span>, <span class="title">TypedOutput</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Object transportObject;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">getTransportObject</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> transportObject;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTransportObject</span><span class="params">(Object transportObject)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.transportObject = transportObject;</span><br><span class="line">	&#125;</span><br><span class="line">  ……</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//实现转换器将查询结果返回给调用者，由于Retrofit代码限制需要反射读取相关field</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SqliteConverter</span> <span class="keyword">implements</span> <span class="title">Converter</span> </span>&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">fromBody</span><span class="params">(TypedInput body, Type type)</span> <span class="keyword">throws</span> ConversionException </span>&#123;</span><br><span class="line">  </span><br><span class="line">		TypedOData odataInput = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Field odataField = body.getClass().getDeclaredField(<span class="string">"delegate"</span>);</span><br><span class="line">			odataField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">			odataInput = (TypedOData)odataField.get(body);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (IllegalArgumentException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> odataInput.getTransportObject();</span><br><span class="line">	&#125;</span><br><span class="line">  ……</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//实现执行者，检查输入参数执行数据库查询</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SqliteClient</span> <span class="keyword">implements</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Response <span class="title">execute</span><span class="params">(Request request)</span> <span class="keyword">throws</span> IOException </span>&#123;		</span><br><span class="line">    TypedOData data = (TypedOData)request.getBody();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">null</span> == data) &#123;</span><br><span class="line">			data = <span class="keyword">new</span> TypedOData();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(HTTP_GET.equals(request.getMethod())) &#123;</span><br><span class="line">         <span class="comment">//解析request参数，orm成sql查询数据库并转换成java对象</span></span><br><span class="line">         data.setTransportObject(查询结果);</span><br><span class="line">		&#125;</span><br><span class="line">				</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Response(request.getUrl(), statusCode, reason, <span class="keyword">new</span> ArrayList&lt;Header&gt;(), data);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现相关类之后使用Retrofit.Builder替换相关实现即可，不过这里有点需要注意的是<strong>1.9版本的话，setLogLevel一定不要设置，否则TypedInput会被替换，无法得到你自己定义的</strong>，毕竟Retrofit本来是为了处理HTTP流的，具体原因如果有兴趣可以自己阅读代码。</p>
+<p>最后只想说，如此大牛的代码，如此精湛的套路，没有多年的实际架构经验是设计不出来的，只能强烈推荐膜拜学习。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/index/tags/android/" rel="tag">#android</a>
+          
+            <a href="/index/tags/java/" rel="tag">#java</a>
+          
+            <a href="/index/tags/retrofit/" rel="tag">#retrofit</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/index/2016/01/14/android-interview/" rel="next" title="android面试知识整理">
+                <i class="fa fa-chevron-left"></i> android面试知识整理
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/index/images/1.jpg" alt="gitcore" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">gitcore</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">学习总结 思考感悟 知识管理</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/index/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/index/categories">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/index/tags">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gitcore" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> Others
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">gitcore</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/index/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+    
+
+  
+
+
+  
+
+  
+  <script type="text/javascript" src="/index/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/index/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/index/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/index/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/index/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/index/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/index/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/index/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/index/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/index/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>

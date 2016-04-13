@@ -37,7 +37,7 @@
 <link href="/index/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content=".net,C#,owin," />
+  <meta name="keywords" content="C#,MVVM,UWP," />
 
 
 
@@ -53,16 +53,16 @@
 
 
 
-<meta name="description" content="最近在做一个推送服务器项目，使用的是owin，因为发现网上关于owin的几乎都是纯技术性的文章，觉得有点不好理解，所以我就写了这篇文章，谈谈我个人对owin的认知，即作为项目的总结，也希望给想学习owin的同学抛块砖，当然就像我写的那样这是我自己的理解，并不代表官方意见^_^">
+<meta name="description" content="阅读以下内容你需要理解依赖对象、依赖属性、XAML的基本原理和XAML的附加属性。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="owin笔记（一）">
-<meta property="og:url" content="http://gitcore.github.io/index/2015/11/08/owin-experience-0/index.html">
+<meta property="og:title" content="Blend SDK MVVM实现原理分析前篇">
+<meta property="og:url" content="http://gitcore.github.io/index/2015/11/14/mvvm20151114/index.html">
 <meta property="og:site_name" content="gitcore's blog">
-<meta property="og:description" content="最近在做一个推送服务器项目，使用的是owin，因为发现网上关于owin的几乎都是纯技术性的文章，觉得有点不好理解，所以我就写了这篇文章，谈谈我个人对owin的认知，即作为项目的总结，也希望给想学习owin的同学抛块砖，当然就像我写的那样这是我自己的理解，并不代表官方意见^_^">
-<meta property="og:updated_time" content="2015-11-11T15:55:32.263Z">
+<meta property="og:description" content="阅读以下内容你需要理解依赖对象、依赖属性、XAML的基本原理和XAML的附加属性。">
+<meta property="og:updated_time" content="2016-04-12T02:29:58.495Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="owin笔记（一）">
-<meta name="twitter:description" content="最近在做一个推送服务器项目，使用的是owin，因为发现网上关于owin的几乎都是纯技术性的文章，觉得有点不好理解，所以我就写了这篇文章，谈谈我个人对owin的认知，即作为项目的总结，也希望给想学习owin的同学抛块砖，当然就像我写的那样这是我自己的理解，并不代表官方意见^_^">
+<meta name="twitter:title" content="Blend SDK MVVM实现原理分析前篇">
+<meta name="twitter:description" content="阅读以下内容你需要理解依赖对象、依赖属性、XAML的基本原理和XAML的附加属性。">
 
 
 
@@ -74,7 +74,7 @@
   };
 </script>
 
-  <title> owin笔记（一） | gitcore's blog </title>
+  <title> Blend SDK MVVM实现原理分析前篇 | gitcore's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
@@ -214,7 +214,7 @@
             
             
               
-                owin笔记（一）
+                Blend SDK MVVM实现原理分析前篇
               
             
           </h1>
@@ -223,8 +223,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2015-11-08T22:08:43+08:00" content="2015-11-08">
-              2015-11-08
+            <time itemprop="dateCreated" datetime="2015-11-14T22:08:43+08:00" content="2015-11-14">
+              2015-11-14
             </time>
           </span>
 
@@ -247,16 +247,27 @@
       
 
       
-        <span itemprop="articleBody"><p>最近在做一个推送服务器项目，使用的是owin，因为发现网上关于owin的几乎都是纯技术性的文章，觉得有点不好理解，所以我就写了这篇文章，谈谈我个人对owin的认知，即作为项目的总结，也希望给想学习owin的同学抛块砖，当然就像我写的那样这是我自己的理解，并不代表官方意见^_^<br><a id="more"></a></p>
-<h3 id="什么是owin">什么是owin</h3><p>这三篇博客已经把owin具体结构描述的非常清晰了</p>
-<p><a href="http://www.cnblogs.com/OceanEyes/p/thinking-in-asp-net-mvc-what-is-owin.html" target="_blank" rel="external">ASP.NET MVC随想录——漫谈OWIN</a></p>
-<p><a href="http://www.cnblogs.com/dudu/p/what-is-owin.html" target="_blank" rel="external">OWIN是什么？</a></p>
-<p><a href="http://www.cnblogs.com/JustRun1983/p/3955238.html" target="_blank" rel="external">下一代Asp.net开发规范OWIN（1）—— OWIN产生的背景以及简单介绍</a></p>
-<h3 id="到底什么是owin">到底什么是owin</h3><p>我觉得与其说这是一门.net平台的新的web开发技术，不如说是一个开放的微软的直接体现。本质上来说owin没有什么新技术在里面，如果简单的总结，owin的大体设计和IIS+IHttpHandler概念上基本是一致的，而应用层面还是asp.net mvc或nancy等等，你完全不需要学习任何新东西就可以上手。说到这那么你会奇怪了，那还要owin干什么？</p>
-<p>如果你一直在使用微软的.net平台，那么你肯定会有一种感受，除了业务层面的东西，底层基本都是黑匣子，正因为这黑匣子不但将你牢牢地绑在了windows平台，而且还严重限制了你扩展应用优化性能，造成了各种不能忍。比如对于原来的asp.net来说优化只能到最轻量的IHttpHandler为止，而之前的HttpWorker管线对你来说就是一抹黑，再怎么优化也无法摆脱IIS性能对应用的束缚，这种要命的局限性也直接注定了.net平台的尴尬现状，虽然极为优秀却乏人问津</p>
-<p>现在owin来了，它定义一个完整的规范，从下至上从里到外，彻底解放了原有的种种束缚，只要你愿意折腾，所有的地方都可以折腾，全部都靠一个简单不能再简单的委托模型链接。所以就像我最开始写的与其说owin是门新技术，不如说它是种景愿，希望能扫去过去的尘埃激发平台的活力</p>
-<h3 id="总结">总结</h3><p>如果asp.net代表了一个平台的话，那么owin就是更好的asp.net，更简单更灵活，并且性能更高，owin完全解耦了.net web应用程序与web服务器，它们之间通过透明的接口进行调用，所有的调用管线全部都清清楚楚明明白白，可以完全掌控，再也不是以前那种一抹黑了</p>
-<p>现在你可以尽情的扩展优化你的服务了，无论是在web服务器层面还是在应用层面，你不会再有任何限制</p>
+        <span itemprop="articleBody"><p>阅读以下内容你需要理解依赖对象、依赖属性、XAML的基本原理和XAML的附加属性。<br><a id="more"></a></p>
+<p>###1、什么是MVVM</p>
+<p>Windows Phone Silverlight客户端一般由XAML、代码程序集和资源组成，这种结构和Android有类似的地方，但与Android不同的是，Android所使用的XML仅仅只是用于描述界面信息，而Windows Phone所使用的XAML具有强大的类型系统描述功能和运行时语义定义功能，这些功能赋予了我们良好运行时脚本编写能力，可以在运行时动态绑定类型和方法，这就为我们创建低耦合程序创造了便利的条件。在Blend Toolkit中，微软提供了2种设计模式用来扩展Silverlight元素的行为，分别基于Behavior行为和Trigger触发器，几乎每一个介绍这种扩展模型的作者，无不流露出对其设计的赞赏。<br>而MVVM是由这种扩展模型发展而来的专为WPF打造的模式, MVVM是MVC的一个变种, 它的目标是从视图层移除几乎所有代码隐藏（code-behind）。交互设计师可以专注于使用XAML表达用户体验需求，然后创建和视图模型的绑定，而视图模型则是由应用程序开发者开发和维护的。 就像其他架构模式一样，其目的则是程序的扩展性、可维护性和复用性。</p>
+<p>###2、一切的基石</p>
+<p>如果你没有使用”数据绑定”的习惯, 那么研究MVVM就没有多大意义，因为数据绑定是一切的基石。而在WPF中数据绑定都是由依赖属性系统完成的。<br>WPF中依赖属性是由WPF系统维护的属性系统，它贯穿于整个应用体系中的，用来实现样式，自动数据绑定，动画等等，以至于后面你恨不得所有的属性都是依赖属性。数据绑定和依赖属性它们都是MVVM中的重要组成概念。<br>在MVVM实现中还有一个重要概念被运用在XAML中，称之为附加属性，这种被称为附加属性的属性元素可以被附加到任何元素节点中，运行时环境通过解释这种附加行为来实现巧妙的代码设计机制。</p>
+<p>###3、Blend Toolkit中的扩展行为</p>
+<p>在Blend Toolkit提供了微软提供了一个附加程序集System.Windows.Interactivity，用来实现Blend设计器的两种行为扩展，即行为（behaviors）和触发器（triggers），下面就从XAML代码来开始分析它们：<br>假设我们拥有了一个button按钮控件，这时你就需要处理这个按钮的相关事件了。</p>
+<p>普通的事件处理声明如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;Button Content=&#34;&#30331;&#38470;&#34; Height=&#34;72&#34; HorizontalAlignment=&#34;Left&#34; Margin=&#34;267,411,0,0&#34; x:Name=&#34;button1&#34; VerticalAlignment=&#34;Top&#34; Width=&#34;160&#34; Click=&#34;button1_Click&#34;&#62;</span><br></pre></td></tr></table></figure>
+<p>它将button1的click事件的处理程序绑定到code-behind的button1_Click方法，但code-behind代码隐藏技术是一种极其烦杂的界面代码分离技术，实际上它只是微软为了在.net上实现类似vb那种所见即所得编成方式的一种模仿，根本无法很好的组织代码。</p>
+<p>BlendToolkit扩展声明如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> &#60;Button Content=&#34;&#30331;&#38470;&#34; Height=&#34;72&#34; HorizontalAlignment=&#34;Left&#34; Margin=&#34;267,411,0,0&#34; x:Name=&#34;button1&#34; VerticalAlignment=&#34;Top&#34; Width=&#34;160&#34;&#62;&#10;    &#60;i:Interaction.Triggers&#62;&#10;        &#60;i:EventTrigger EventName=&#34;Click&#34;&#62;&#10;            &#60;ec:CallMethodAction TargetObject=&#34;&#123;Binding ElementName=phoneApplicationPage&#125;&#34; MethodName=&#34;button1_Click&#34; /&#62;&#10;        &#60;/i:EventTrigger&#62;&#10;    &#60;/i:Interaction.Triggers&#62;&#10;&#60;/Button&#62;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码的意思是将button1的click事件的处理方法绑定至phoneApplicationPage.button1_Click方法进行处理，而不是交由code-behind代码处理，看起来比第一段XAML声明复杂了，但实际上它将code-behind这种强耦合关系给解耦了。这样你就可以将事件委托给任何你想要的类进行处理，例如视图模型层中的控制器类或者由视图模型直接处理。<br>那么来看看它是如何实现的，其关键就在于附加属性<code>&lt;i:Interaction.Triggers&gt;</code>上，i为命名空间，不明白请自行补充相关知识，而Interaction类则是重头戏了，在MSDN里是这样描述附加属性的附加属性的一个用途是允许不同的子元素为实际在父元素中定义的属性指定唯一值，很清楚的告诉你可以为父元素指定值。 而实现是附加属性MSDN里给与的方式则是如下面文字描述：<br>如果您的类将附加属性严格定义为用于其他类型，那么该类不必从 DependencyObject 派生。 但是，如果您遵循使附加属性同时也是一个依赖项属性的整体 WPF 模型，则需要从 DependencyObject 派生。<br>通过声明一个 DependencyProperty 类型的 public static readonly 字段将附加属性定义为一个依赖项属性。 通过使用 RegisterAttached 方法的返回值来定义此字段。 为了遵循命名标识字段及其所表示的属性的已建立 WPF 模式，字段名必须与附加属性名一致，并附加字符串Property。 附加属性提供程序还必须提供静态的 Get属性名 和 Set属性名 方法作为附加属性访问器，否则会导致属性系统无法使用您的附加属性。<br>这就清楚的告诉了我们其实附加属性就是成对出现的静态方法，而使用它们只要类名.方法就可以了，那么下面来看看toolkit里的实现，下面是通过反编译出来的代码：<br><code>&lt;i:Interaction.Triggers&gt;</code>元素声明就对应Interaction.GetTriggers方法</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static class Interaction&#10;&#123;&#10;    // Fields&#10;    public static readonly DependencyProperty BehaviorsProperty;&#10;    public static readonly DependencyProperty TriggersProperty;&#10;    // Methods&#10;    static Interaction();&#10;    public static BehaviorCollection GetBehaviors(DependencyObject obj);&#10;    public static TriggerCollection GetTriggers(DependencyObject obj);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>代码中可以看出通过声明<br><code>&lt;i:Interaction.Triggers&gt;</code>元素,XAML运行时得到了一个TriggerCollection集合,即触发器集合。接下来在<code>&lt;i:EventTrigger EventName=&quot;Click&quot;&gt;</code>元素中，XAML运行时创建了一个EventTrigger类实例，并将EventName属性设置为了Click，再接着在<code>&lt;ec:CallMethodAction&gt;</code>元素中，XAML运行时创建了一个CallMethodAction类实例，并设置相关属性来处理Click事件，看似简单的流程实际上引起了一系列的化学反应。</p>
+<p>先看TriggerCollection类，他的功能很简单从代码上看<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">internal override void ItemAdded(TriggerBase item)&#10;&#123;&#10;   if (base.AssociatedObject != null)&#10;   &#123;&#10;       item.Attach(base.AssociatedObject);&#10;   &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>仅仅是如果有Trigger加入集合便调用此Trigger的Attach方法，上述代码使用了TriggerBase基类，实际上我们声明的EventTrigger正是TriggerBase的子类，Attach传递了一个很重要的参数即AssociatedObject，这个对象正是对应了EventTrigger中的Source源属性，也就是说TriggerCollection干了一件事就是为这个EventTrigger准备好了运行环境。</p>
+<p>接下来重要的就是EventName的设置了，代码太长我就不列举了，最最重要的就是当EventName设置的时候会有通知事件告知EventTrigger类，当通知发生EventTrigger便会调用自身的一个重要方法void OnEventNameChanged，进入此方法你就会发现秘密豁然开朗<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">internal void OnEventNameChanged(string oldEventName, string newEventName)&#10;&#123;&#10;    &#123;&#10;        else if (!string.IsNullOrEmpty(newEventName))&#10;        &#123;&#10;            this.RegisterEvent(this.Source, newEventName);&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>看到了吧类在方法中调用了RegisterEvent,并将源和事件名称都传了进去,后面的代码基本可以想象了，RegisterEvent中精华代码如下<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EventInfo eventInfo = obj.GetType().GetEvent(eventName);&#10;this.eventHandlerMethodInfo = typeof(EventTriggerBase).GetMethod(&#34;OnEventImpl&#34;, BindingFlags.NonPublic | BindingFlags.Instance);&#10;eventInfo.AddEventHandler(obj, Delegate.CreateDelegate(eventInfo.EventHandlerType, this, this.eventHandlerMethodInfo));</span><br></pre></td></tr></table></figure></p>
+<p>系统反射了源对象的事件信息，并将自己的TriggerAction这里是CallMethodAction对应的方法注册了进去,形成了一个委托，用来当button的Click事件触发时调用相应的方法进行处理。</p>
+<p>4、MVVMLight中的实现和优缺点</p>
+<p>如果你弄清楚了上文所描述代码调用关系，那么你就能很容易理解此模式实现的关键，在MVVMLight库中，其EventToCommand正是继承了TriggerAction类型，它只是简单的用WPF中的Command模式扩展了Blend SDK的工作机制。而这种基于附加属性的扩展方式正是几乎所有的MVVM库的核心工作方式。<br>从实现方式上可以看出，MVVMLight优点明显，彻底解耦整个系统，界面不必关心具体业务方式，使整个项目可以并行执行，即美工作美工，程序只要最后将业务绑定至界面即可。<br>缺点也很明显，从代码上看，微软的官方实现最大的弊端是强事件模式，当源和处理者生存周期不一致时委托部分将会造成内存泄露，影响应用程序性能和稳定性。</p>
 </span>
       
     </div>
@@ -265,11 +276,11 @@
       
         <div class="post-tags">
           
-            <a href="/index/tags/net/" rel="tag">#.net</a>
-          
             <a href="/index/tags/C/" rel="tag">#C#</a>
           
-            <a href="/index/tags/owin/" rel="tag">#owin</a>
+            <a href="/index/tags/MVVM/" rel="tag">#MVVM</a>
+          
+            <a href="/index/tags/UWP/" rel="tag">#UWP</a>
           
         </div>
       
@@ -278,16 +289,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/index/2015/11/06/firststep/" rel="next" title="心底的起程">
-                <i class="fa fa-chevron-left"></i> 心底的起程
+              <a href="/index/2015/11/08/owin20151108/" rel="next" title="owin笔记（一）">
+                <i class="fa fa-chevron-left"></i> owin笔记（一）
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/index/2015/11/14/mvvm-1/" rel="prev" title="Blend SDK MVVM实现原理分析前篇">
-                Blend SDK MVVM实现原理分析前篇 <i class="fa fa-chevron-right"></i>
+              <a href="/index/2016/01/14/android-interview/" rel="prev" title="android面试知识整理">
+                android面试知识整理 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -356,7 +367,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/index/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>
@@ -370,7 +381,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/index/tags">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">10</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -420,7 +431,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是owin"><span class="nav-number">1.</span> <span class="nav-text">什么是owin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#到底什么是owin"><span class="nav-number">2.</span> <span class="nav-text">到底什么是owin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

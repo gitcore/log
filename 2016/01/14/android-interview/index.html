@@ -37,7 +37,7 @@
 <link href="/index/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="android," />
+  <meta name="keywords" content="android,interview," />
 
 
 
@@ -53,16 +53,16 @@
 
 
 
-<meta name="description" content="android你需要知道的，原创加摘抄整理，持续更新中">
+<meta name="description" content="android面试知识整理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="android基础知识整理">
-<meta property="og:url" content="http://gitcore.github.io/index/2016/01/14/android-base/index.html">
+<meta property="og:title" content="android面试知识整理">
+<meta property="og:url" content="http://gitcore.github.io/index/2016/01/14/android-interview/index.html">
 <meta property="og:site_name" content="gitcore's blog">
-<meta property="og:description" content="android你需要知道的，原创加摘抄整理，持续更新中">
-<meta property="og:updated_time" content="2016-03-02T00:45:55.931Z">
+<meta property="og:description" content="android面试知识整理">
+<meta property="og:updated_time" content="2016-04-13T02:48:07.701Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="android基础知识整理">
-<meta name="twitter:description" content="android你需要知道的，原创加摘抄整理，持续更新中">
+<meta name="twitter:title" content="android面试知识整理">
+<meta name="twitter:description" content="android面试知识整理">
 
 
 
@@ -74,7 +74,7 @@
   };
 </script>
 
-  <title> android基础知识整理 | gitcore's blog </title>
+  <title> android面试知识整理 | gitcore's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
@@ -214,7 +214,7 @@
             
             
               
-                android基础知识整理
+                android面试知识整理
               
             
           </h1>
@@ -247,10 +247,12 @@
       
 
       
-        <span itemprop="articleBody"><p>android你需要知道的，原创加摘抄整理，持续更新中<br><a id="more"></a></p>
-<h2 id="电量的优化">电量的优化</h2><p>1）对于操作严格判断执行时机，例如手机是否处于充电状态，当前电量来决定操作如何执行</p>
+        <span itemprop="articleBody"><p>android面试知识整理<br><a id="more"></a></p>
+<p>###Q：电量的优化</p>
+<p>1）对于操作严格判断执行时机，例如手机是否处于充电状态，当前电量来决定操作如何执行</p>
 <p>2）使用JobScheduler和严格的条件参考用户体验来调度需要执行的代码</p>
-<h2 id="内存优化的几点">内存优化的几点</h2><p>1）使用更加高效的容器，避免系统装箱行为，例如SparseArray、ArrayMap替代HashMap，Android系统提供了SparseBoolMap、SparseIntMap、SparseLongMap、LongSparseMap等容器来提高应用性能，它们位于android.util包里。</p>
+<p>###Q：内存优化的几点</p>
+<p>1）使用更加高效的容器，避免系统装箱行为，例如SparseArray、ArrayMap替代HashMap，Android系统提供了SparseBoolMap、SparseIntMap、SparseLongMap、LongSparseMap等容器来提高应用性能，它们位于android.util包里。</p>
 <p>2）避免在Android里面使用枚举，因为它比static常量形式占用更多的内存。</p>
 <p>3）避免在异步回调中过多的持有activity或view等对象的引用，因为异步回调被执行的时间不确定，很有可能发生在activity已经被销毁之后，这不仅仅很容易引起crash，还很容易发生内存泄露。</p>
 <p>4）避免过多的使用static变量，因为static变量的生命周期几乎覆盖整个应用，不当的使用很容易造成内存泄露，特别是通过static保持对某一activity或view等系统对象的引用。</p>
@@ -274,6 +276,8 @@
           
             <a href="/index/tags/android/" rel="tag">#android</a>
           
+            <a href="/index/tags/interview/" rel="tag">#interview</a>
+          
         </div>
       
 
@@ -281,13 +285,17 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/index/2015/11/14/mvvm-1/" rel="next" title="Blend SDK MVVM实现原理分析前篇">
+              <a href="/index/2015/11/14/mvvm20151114/" rel="next" title="Blend SDK MVVM实现原理分析前篇">
                 <i class="fa fa-chevron-left"></i> Blend SDK MVVM实现原理分析前篇
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/index/2016/03/04/android20160304/" rel="prev" title="Retrofit详解和扩展">
+                Retrofit详解和扩展 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -355,7 +363,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/index/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>
@@ -369,7 +377,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/index/tags">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">10</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -419,7 +427,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#电量的优化"><span class="nav-number">1.</span> <span class="nav-text">电量的优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存优化的几点"><span class="nav-number">2.</span> <span class="nav-text">内存优化的几点</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
